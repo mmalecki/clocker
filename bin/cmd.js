@@ -31,7 +31,7 @@ else if (argv._[0] === 'stop') {
     var d = argv.date ? new Date(argv.date) : new Date;
     var k = argv.key || argv._[1];
     if (k) {
-        key = getKey(key);
+        var key = getKey(k);
         db.get(key, function (err, value) {
             if (err) error(err)
             else onrowstop({ key: key, value: value })
@@ -204,8 +204,10 @@ else if (argv._[0] === 'get') {
     });
 }
 else if (argv._[0] === 'rm') {
-    var key = getKey(argv._[1]);
-    db.del(key, error);
+    argv._.slice(1).forEach(function (k) {
+        var key = getKey(k);
+        db.del(key, error);
+    });
 }
 else if (argv._[0] === 'set') {
     if (argv._.length < 3) {
